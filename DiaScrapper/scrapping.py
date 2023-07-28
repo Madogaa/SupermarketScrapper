@@ -59,17 +59,24 @@ def section_parse(url):
 
     return section_products
 
-def convert_to_float(price):
-  price = price.replace('(', '')
-  price = price.replace('\xa0€', '')
-  price = price.replace(',', '.')
-  price = price.split('/')[0]
-  return float(price)
+def convert_to_float(price,titulo):
+    try:
+        price = price.replace('(', '')
+        price = price.replace('\xa0€', '')
+        price = price.replace(',', '.')
+        price = price.split('/')[0]
+        price = float(price)
+        return(round(price,2))
+    except ValueError as e:
+        print(f"Error al convertir el precio a float: {e} ==> {titulo}" )
+        # Puedes decidir cómo manejar el error aquí, por ejemplo, retornar un valor por defecto
+        return float(0)  # O cualquier otro valor que consideres apropiado
+
 
 def clean_products(productos):
     for product in productos:
-        product['Precio'] = convert_to_float(product['Precio'])
-        product['PrecioPorKilo'] = convert_to_float(product['PrecioPorKilo'])
+        product['Precio'] = convert_to_float(product['Precio'],product['Titulo'])
+        product['PrecioPorKilo'] = convert_to_float(product['PrecioPorKilo'],product['Titulo'])
 
 def parse_dia():
     productos = []
@@ -82,6 +89,5 @@ def parse_dia():
 productos = parse_dia()
 productos
 
-# %%
-productos
+
 # %%
